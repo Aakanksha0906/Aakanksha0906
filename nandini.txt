@@ -1,0 +1,203 @@
+package com.cg.productmgmt.ui;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
+
+
+import com.cg.productmgmt.exception.ProductException;
+import com.cg.productmgmt.service.IProductService;
+import com.cg.productmgmt.service.IProductServiceImpl;
+
+public class Client {
+
+    public static void main(String[] args) throws ProductException {
+        // TODO Auto-generated method stub
+        IProductService service=new IProductServiceImpl();
+        Scanner sc=new Scanner(System.in);
+        int ch;
+        do
+        {
+        
+        
+            ch=sc.nextInt();
+            switch(ch)
+            {
+       
+            case 1:
+                System.out.println("Enter the Product Category");
+                String cat=sc.next();
+                System.out.println("Enter hike");
+                int hike=sc.nextInt();
+                if(hike>0)
+                {
+                try
+                {
+                if(service.updateProducts(cat, hike)==0)
+                {
+                    Map<String,Integer> m=service.getProductDetails();
+                    Set<String> s=m.keySet();
+                    Iterator<String> i=s.iterator();
+                    while(i.hasNext())
+                    {
+                        String tem=i.next();
+                        System.out.println("Product Name: "+tem+" Price: "+m.get(tem));
+                    }
+                }
+                else throw new ProductException("not updated");
+                }
+                catch (ProductException e) {
+                    // TODO: handle exception
+                    
+                }
+                }
+                else
+                System.out.println("hike cannot be zero");
+                break;
+            case 2:
+                System.out.println("Exit Thank you");
+                break;
+            }
+            
+        }while(ch!=2);
+
+    }
+
+}
+----------------------------------------------------
+//dao class
+package com.cg.productmgmt.dao;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
+import com.cg.productmgmt.exception.ProductException;
+
+public class IProductDaoImpl implements IProductDao{
+    //map for Category as key and name as value
+    static Map<String,String> productDetails;
+    //map for Product name as key and price as value
+    static Map<String,Integer> salesDetails;
+    static
+    {
+        productDetails =new HashMap<String, String>();
+        productDetails.put("lux", "soap");
+        productDetails.put("colgate","paste");
+        productDetails.put("pears", "soap");
+        productDetails.put("sony","electronics");
+        productDetails.put("samsung","electronics");
+        productDetails.put("facepack","cosmatics");
+        productDetails.put("facecream","cosmatics");
+        salesDetails =new HashMap<>();
+        salesDetails.put("lux",100);
+        salesDetails.put("colgate",50);
+        salesDetails.put("pears",70);
+        salesDetails.put("sony",10000);
+        salesDetails.put("samsung",23000);
+        salesDetails.put("facepack",100);
+        salesDetails.put("facecream",60);
+    
+    }
+    @Override
+    public int updateProducts(String category, int hike)
+            throws ProductException {
+        // TODO Auto-generated method stub
+       Set<String> s=productDetails.keySet();
+        //System.out.println("set");
+        for(String key : s){
+            String values=productDetails.get(key);
+            //System.out.println(values);
+            if(category.equals(values)){
+                int value=salesDetails.get(key);
+                //System.out.println(value);
+                int ans=value+value*hike/100;
+                salesDetails.put(key, ans);
+            //  System.out.println("hi");
+            }
+        }
+        
+        return 1;
+           }
+
+    @Override
+    public Map<String, Integer> getProductDetails() throws ProductException {
+        // TODO Auto-generated method stub
+        return salesDetails;
+    }
+
+}
+--------------------------------
+//dao interface
+package com.cg.productmgmt.dao;
+import java.util.Map;
+
+import com.cg.productmgmt.exception.ProductException;
+
+public interface IProductDao {
+    public int updateProducts(String category,int hike) throws ProductException;
+    public Map<String,Integer> getProductDetails() throws ProductException;
+    
+
+}
+----------------------------------------------------
+//service class
+package com.cg.productmgmt.service;
+
+import java.util.Map;
+
+import com.cg.productmgmt.dao.IProductDao;
+import com.cg.productmgmt.dao.IProductDaoImpl;
+import com.cg.productmgmt.exception.ProductException;
+
+public class IProductServiceImpl implements IProductService{
+    IProductDao dao;
+    public IProductServiceImpl() {
+        dao=new IProductDaoImpl();
+    }
+
+    @Override
+    public int updateProducts(String category, int hike)
+            throws ProductException {
+        // TODO Auto-generated method stub
+        return dao.updateProducts(category, hike);
+    }
+
+    @Override
+    public Map<String, Integer> getProductDetails() throws ProductException {
+        // TODO Auto-generated method stub
+        return dao.getProductDetails();
+    }
+    
+
+}
+--------------------------------------
+//service interface
+package com.cg.productmgmt.service;
+
+import java.util.Map;
+
+import com.cg.productmgmt.exception.ProductException;
+
+public interface IProductService {
+    public int updateProducts(String category,int hike) throws ProductException;
+    public Map<String,Integer> getProductDetails() throws ProductException;
+
+}
+-------------------------
+//exception
+package com.cg.productmgmt.exception;
+
+public class ProductException extends Exception{
+    public ProductException(String msg)
+    {
+        super(msg);
+    }
+    ProductException()
+    {
+        
+    }
+
+}
+
