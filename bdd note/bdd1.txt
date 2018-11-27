@@ -1,0 +1,16 @@
+	List<String> objList = nos.asList(String.class);
+		String data=null;
+		for (String dataTemp:objList) {
+			data=dataTemp;
+			hotelPageFact.getMobile().clear();//?
+			hotelPageFact.setMobile(dataTemp);
+			Thread.sleep(1000);
+			hotelPageFact.setButton();
+			
+			if (Pattern.matches("^[7-9]{1}[0-9]{9}$",data)) {
+				System.out.println("Matching ");
+			} else {
+				String alertMessage = driver.switchTo().alert().getText();
+				Thread.sleep(1000);
+				driver.switchTo().alert().accept();
+				System.out.println("not matched "+alertMessage); 

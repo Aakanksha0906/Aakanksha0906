@@ -1,0 +1,23 @@
+// TODO Auto-generated method stub
+		System.setProperty("webdriver.chrome.driver", "C:\\Users\\kathirn\\Desktop\\chromedriver.exe");
+    	WebDriver driver=new ChromeDriver();
+    	
+/*		File pathToBinary = new File("C:/Program Files/Mozilla Firefox/firefox.exe");
+		FirefoxProfile firefoxProfile = new FirefoxProfile();
+		FirefoxBinary binary = new FirefoxBinary(pathToBinary);
+				
+		WebDriver driver = new FirefoxDriver(binary,firefoxProfile);
+		*/
+		driver.get("file:///C:/Users/kathirn/Desktop/hotelBooking/hotelbooking.html");
+		
+		String parentWindow = driver.getWindowHandle().toString();
+		
+		driver.findElement(By.linkText("click")).click();
+		driver.switchTo().window("PopupWindow");
+	//	driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		Thread.sleep(2000);
+		driver.close();
+		
+		driver.switchTo().window(parentWindow);
+		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		//driver.close(); 

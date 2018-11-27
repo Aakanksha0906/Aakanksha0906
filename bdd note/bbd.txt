@@ -1,0 +1,150 @@
+
+No Title 
+Feature: Google Searching
+
+  Scenario: Google Image search shows movies
+    Given the user opens a web browser
+    And the user navigates to "https://www.google.com/"
+    When the user enters "Avengers" into the search bar
+    Then links related to "Avengers" are shown on the results page
+    When the user clicks on the "images" link at the top of the results page
+    Then images related to "Avengers" are shown on the results page
+==============
+
+
+
+
+
+
+
+The first two steps are purely setup
+
+After the Given step, there are two When-Then pairs. This is syntactically incorrect: Given-When-Then steps must appear in order and cannot repeat. A Given may not follow a When or Then, and a When may not follow a Then. 
+
+The reason is simple: any single When-Then pair denotes an individual behavior. This makes it easy to see how, in the test above, there are actually two behaviors covered: (1) searching from the search bar, and (2) performing an image search. In Gherkin, one scenario covers one behavior. Thus, there should be two scenarios instead of one. Any time you want to write more than one When-Then pair, write separate scenarios instead. 
+
+
+
+
+
+
+
+
+
+
+Feature: Google Searching
+
+  Scenario: Search from the search bar
+    Given a web browser is at the Google home page
+    When the user enters "Avengers" into the search bar
+    Then links related to "Avengers" are shown on the results page
+
+  Scenario: Image search
+    Given Google search results for "Avengers" are shown
+    When the user clicks on the "movies" link at the top of the results page
+    Then images related to "Avengers" are shown on the results page
+
+
+Write all steps in third-person point of view.
+
+Write steps as a subject-predicate action phrase
+
+And image links for "Avengers"
+    And video links for "Avengers"
+
+
+above miss subject predicate action
+
+solution as above
+
+
+
+Another common misconception for beginners is thinking that Gherkin has an “Or” step for conditional or combinatorial logic. 
+
+People may presume that Gherkin has “Or” because it has “And”, or perhaps programmers want to treat Gherkin like a structured language. However, Gherkin does not have an “Or” step. 
+
+When automated, every step is executed sequentially.
+
+
+Feature:  Mario Controls
+
+  Scenario: Mario jumps
+    Given a level is started
+    When the player pushes the "A" button
+    Or(BUT) the player pushes the "B" button
+    Then Mario jumps straight up
+
+Mario should jump when the player pushes either of two buttons. 
+
+here we need to cover multiple variations of the same behavior.
+
+In order to do this the right way, use Scenario Outline sections to 
+cover multiple variations of the same behavior
+
+Feature:  Mario Controls
+
+  Scenario Outline: Mario jumps
+    Given a level is started
+    When the player pushes the "<letter>" button
+    Then Mario jumps straight up
+    
+    Examples: Buttons
+      | letter |
+      | A      |
+      | B      |
+
+Test data can be difficult to handle. 
+
+Sometimes, it may be possible to hard coded or loaded in the system and write tests to reference it, but mostly not. Google search is the prime example: the result list will change over time as both Google and the Internet change. To handle the known unknowns, write scenarios defensively so that changes in the underlying data do not cause test runs to fail. 
+
+
+
+make it short:
+
+When the user scrolls the mouse to the search bar
+And the user clicks the search bar
+And the user types the letter “A”
+And the user types the letter “E”
+And the user types the letter “I”
+And the user types the letter “O”
+And the user types the letter “U”
+And the user types the ENTER key
+
+Declarative steps state what action should happen without providing all of the information for how it will happen. They are behavior-driven because they express action at a higher level. All of the imperative steps in the example above could be written in one line: “When the user enters ‘movies’ at the search bar.”
+
+key strokes and scrolling are taken care by stepdef
+
+follow the below steps
+
+Focus a feature on customer needs.
+Limit one feature per feature file. This makes it easy to find features.
+Limit the number of scenarios per feature. Nobody wants a thousand-line feature file. A good measure is a dozen scenarios per feature.
+Limit the number of steps per scenario to less than ten.
+Limit the character length of each step. Common limits are 80-120 characters.
+Use proper spelling.
+Use proper grammar.
+Capitalize Gherkin keywords.
+Capitalize the first word in titles.
+Do not capitalize words in the step phrases unless they are proper nouns.
+Do not use punctuation (specifically periods and commas) at the end of step phrases.
+Use single spaces between words.
+Indent the content beneath every section header.
+Separate features and scenarios by two blank lines.
+Separate examples tables by 1 blank line.
+Do not separate steps within a scenario by blank lines.
+Space table delimiter pipes (“|”) evenly.
+Adopt a standard set of tag names. Avoid duplicates.
+Write all tag names in lowercase, and use hyphens (“-“) to separate words.
+Limit the length of tag names.
+When trying to reduce step count, ask yourself if your steps can be written more declaratively.
+
+
+
+
+
+
+
+
+
+ 
+ 
