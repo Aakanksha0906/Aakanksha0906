@@ -1,0 +1,166 @@
+********************
+jsp1
+*********************
+
+<form action="login.jsp"> 
+    <button type="submit">Discount</button>
+ </form>
+
+**************************
+jsp2 (login.jsp)
+**************************
+<body>
+<form action="LoginServlet method= "post">
+
+			Please enter your username 		
+			<input type="text" name="un"/><br>		
+		
+			Please enter your password
+			<input type="text" name="pw"/>
+                        
+                        Please enter promo number
+                        <input type="text" name=promo/>
+<input type="submit" value="submit">	
+</form>
+</body>
+
+
+
+***************************
+Loginservlet.java
+****************************
+
+package com.cg.appstore.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.cg.Appsore.dto.Client;
+import com.cg.Appstore.service.ITrainingService;
+
+
+
+****************
+Inside DOpost method
+*********************
+ITrainingService trainingservice;
+ArrayList<bean> e ;
+String a=request.getparameter("promo");
+bean b =new bean();
+b.setpromo(a);
+e=trainingservice.details(b);
+
+
+
+
+
+
+
+**************************
+in dao 
+*****************************
+query syntax no idea......
+
+rs=select product_id,promo,Timeperiod,product_price from <table name> where promo='+b';
+ while(rs.next)
+{
+bean c=new bean();
+#######create arraylist here######name if suppose l anukoo.......
+String a=rs.getString(1);
+String b=rs.getString(2);
+String c=rs.getString(3);
+String d=rs.getString(4);
+String e=rs.getString(5);
+##########  c nothing but bean glass ####################
+c.setproduct_id(a);  
+c.setpromo(b);
+#After Discount Price #
+if(b.equalsIgnorecase(Hi))
+{
+
+d= c-((5*c)/100);
+}
+else
+{
+d=c-((10*c)/100);
+}
+b.setdiscountprice(d);
+}
+l.add(c);###here c is nothing but bean class#############
+
+
+}
+return l;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@Controller
+public class TrainingController {
+	
+	@Autowired
+	ITrainingService trainingservice;
+	
+	@RequestMapping(value="schedule",method=RequestMethod.GET)
+	public ModelAndView getAllDetail() {
+		List<Client> clientData=trainingservice.getAllDetail();
+		return new ModelAndView("ScheduledSessions", "data", clientData);
+	}
+	@RequestMapping(value="Enroll Me",method=RequestMethod.GET)
+	public ModelAndView dataDisplay(@RequestParam("name") String cname) {
+		
+		return new ModelAndView("Success", "ename", cname);
+	}
+	
+
+}
+
+
+
+
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+    <%@ taglib prefix="a" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<h1>APP STORE DATA</h1>
+<table>
+<tr>
+<td><b></b></td>
+<td><b>Duration(Days)</b></td>
+<td><b>Faculty</b></td>
+<td><b>Mode</b></td>
+</tr>
+<a:forEach var="clt" items="${data}">
+<tr>
+<td>${clt.name}</td>
+<td>${clt.dur}</td>
+<td>${clt.fac}</td>
+<td>${clt.mode}</td>
+<td><a href="Enroll Me?name=${clt.name}">Enroll Me</a></td>
+</a:forEach>
+
+</table>
+</body>
+</html>
